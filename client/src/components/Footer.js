@@ -31,7 +31,7 @@ export default function Footer({ menuItems }) {
         <div className="w-full xl:w-1/3 flex flex-col items-center">
             <a href="/" className="group items-center flex flex-col">
             <image src={Logo} className="stroke-secondary fill-transparent w-16 h-16" />
-              <h1 className="text-27 font-bold text-secondary">Future Job</h1>
+              <h1 className="text-27 font-bold text-secondary">Jobify</h1>
             </a>
         </div>
         <div className="w-full xl:w-1/3 flex flex-col items-center py-8 pt-32 xl:items-end text-18 font-regular text-secondary">

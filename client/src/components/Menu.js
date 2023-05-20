@@ -13,7 +13,7 @@ export default function Menu({ menuItems }) {
     >
           <a href="/" className="group flex text-27 font-bold text-secondary hover:text-primary items-center gap-2 whitespace-nowrap">
         <img src={Logo} alt="Logo" className="stroke-secondary fill-transparent group-hover:stroke-primary w-16 h-16 shrink-0" />
-        Future Job
+        Jobify
       </a>
 
       <ul className="flex flex-row items-center justify-center gap-x-2 lg:gap-x-4">
@@ -53,7 +53,7 @@ export default function Menu({ menuItems }) {
           onClick={() => setMenuOpen(!menuOpen)}
           className="w-1/6 lg:w-full group"
         >
-          <image src={BurgerMenu} className="fill-secondary group-hover:fill-primary w-8 h-8" />
+          <img src={BurgerMenu} className="fill-secondary group-hover:fill-primary w-8 h-8" />
         </button>
       </ul>
       <MenuFullScreen

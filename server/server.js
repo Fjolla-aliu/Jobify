@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const PORT = 4000;
 app.use(cors());
 app.use(bodyParser.json());
-mongoose.connect("mongodb://127.0.0.1:27017/lab-two", {
+mongoose.connect("mongodb+srv://fjollaaliu:MyMongoDb123@lab-two.swdp1wm.mongodb.net/lab-two", {
   useNewUrlParser: true,
 });
 const connection = mongoose.connection;

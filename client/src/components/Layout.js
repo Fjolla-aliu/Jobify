@@ -2,7 +2,7 @@ import Menu from "./Menu";
 import Footer from "./Footer";
 import { useEffect, useState } from "react";
 
-//SVG-s
+//SVG
 import Tik from "../image/icons/others/tik-with-circle.svg";
 import Triangle from "../image/icons/shapes/triangle-info.svg";
 import User from "../image/icons/others/user.svg";
@@ -10,17 +10,10 @@ import Building from "../image/icons/objects/building.svg";
 import Question from "../image/icons/objects/question.svg";
 
 export default function Layout({ children }) {
-  //const user = useStore((state) => state.user);
-  //const jobsSavedCounter = useStore((state) => state.jobsListCounter);
+  
   const [jobsSavedNumber, setJobsSavedNumber] = useState(0);
 
   const [worksSavedNumber, setWorksSavedNumber] = useState(0);
-
-  // useEffect(() => {
-  //   setJobsSavedNumber(jobsSavedCounter);
-  // }, [jobsSavedCounter]);
-
- 
 
   const [menuItems, setMenuItems] = useState([
     {
