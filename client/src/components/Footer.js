@@ -41,7 +41,7 @@ export default function Footer({ menuItems }) {
       </div>
       <div className="flex text-12 font-regular w-full text-tertiary items-center justify-center ">
         <p>
-          Copyright &copy;{" "}
+          Copyright &copy;{""}
         
         </p>
       </div>
