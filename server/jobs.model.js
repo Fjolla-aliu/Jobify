@@ -29,4 +29,5 @@ let Job = new Schema({
     type: String,
   },
 });
+
 module.exports = mongoose.model("Job", Job);
