@@ -13,7 +13,6 @@ export default function Layout({ children }) {
   
   const [jobsSavedNumber, setJobsSavedNumber] = useState(0);
 
-  const [worksSavedNumber, setWorksSavedNumber] = useState(0);
 
   const [menuItems, setMenuItems] = useState([
     {
@@ -36,7 +35,7 @@ export default function Layout({ children }) {
       icon: <image src={Tik} className="w-4 h-4 fill-secondary group-hover:fill-primary" />,
       link: "/favorites",
       label: "Favorites",
-      cartCounter: jobsSavedNumber + worksSavedNumber,
+      cartCounter: jobsSavedNumber,
     },
     {
       icon: (
@@ -83,7 +82,7 @@ export default function Layout({ children }) {
           ),
           link: "/favorites",
           label: "Favorites",
-          cartCounter: jobsSavedNumber + worksSavedNumber,
+          cartCounter: jobsSavedNumber,
         },
         {
           icon: (
@@ -119,7 +118,7 @@ export default function Layout({ children }) {
         },
       ]);
     
-  }, [ jobsSavedNumber, worksSavedNumber]);
+  }, [ jobsSavedNumber]);
 
  
 

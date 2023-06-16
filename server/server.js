@@ -4,6 +4,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const sql = require('mssql/msnodesqlv8');
+
+
 const PORT = 4000;
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,9 +17,58 @@ const connection = mongoose.connection;
 connection.once("open", function () {
   console.log("MongoDB database connection established successfully");
 });
+
+
+//----- sql database configuration-----
+
+const connectionString = "Driver=msnodesqlv8;Server=.;Database=jobifydb;Trusted_Connection=Yes;";
+
+
+
+//-----------connection------------------------------
+
+const query = "SELECT * FROM empTable";
+
+// sql.connect(config, function (err) {
+//   if (err) {
+//     console.log("SQL Server connection error:", err);
+//     return;
+//   }
+
+//   const request = new sql.Request();
+//   request.query(query, function (err, recordset) {
+//     if (err) {
+//       console.log("SQL Server query error:", err);
+//       return;
+//     }
+
+//     console.log(recordset);
+
+//     // Closing the SQL Server connection
+//     sql.close();
+//   });
+// });
+
+sql.connect(connectionString, function (err) {
+  if (err) {
+    console.log("SQL Server connection error: " + err);
+    return;
+  }
+
+  sql.query(query, function (err, rows) {
+    if (err) {
+      console.log("SQL query error: " + err);
+      return;
+    }
+
+    console.log(rows);
+  });
+});
+
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
+
 
 // ------------------------Job managing -------------------------------------------------------
 
