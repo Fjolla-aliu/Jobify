@@ -19,67 +19,6 @@ connection.once("open", function () {
 });
 
 
-//----- sql database configuration-----
-
-const connectionString = "Driver=msnodesqlv8;Server=.;Database=jobifydb;Trusted_Connection=Yes;";
-var config = {
-    user: '',
-    password: '',
-    server: '192.168.1.101',
-    driver: 'tedious',
-    database: 'jobifydb',
-    options: {
-        instanceName: 'sql'
-    }
-};
-var config1 = {
-        user: '',
-        password: '',
-        server: 'localhost', 
-        database: 'jobifydb' 
-    };
-
-//-----------connection------------------------------
-
-const query = "SELECT * FROM empTable";
-
-
-
-// sql.connect(config, function (err) {
-//   if (err) {
-//     console.log("SQL Server connection error: " + err);
-//     return;
-//   }
-
-//   sql.query(query, function (err, rows) {
-//     if (err) {
-//       console.log("SQL query error: " + err);
-//       return;
-//     }
-
-//     console.log(rows);
-//   });
-// });
-// sql.connect(config, function (err) {
-//   if (err) {
-//     console.log("SQL Server connection error:", err);
-//     return;
-//   }
-
-//   const request = new sql.Request();
-//   request.query(query, function (err, recordset) {
-//     if (err) {
-//       console.log("SQL Server query error:", err);
-//       return;
-//     }
-
-//     console.log(recordset);
-
-//     // Closing the SQL Server connection
-//     sql.close();
-//   });
-// });
-
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
