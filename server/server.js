@@ -89,3 +89,77 @@ booksRoutes.route("/:id").delete(function (req, res) {
   db.collection("jobs").deleteOne({ id: req.params.id });
   res.send(req.body);
 });
+
+
+
+
+
+// ----------------------------Managing Workers -------------------------------------------------------
+
+
+let Worker = require("./work.model");
+
+const applyWorker = express.Router();
+app.use("/works", applyWorker);
+
+applyWorker.route("/:id").get(function (req, res) {
+  if (req.params.id !== undefined) {
+    Worker.findOne({ id: req.params.id }, function (err, workers) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.json(workers);
+      }
+    });
+  }
+});
+
+applyWorker.route("/my/:id").get(function (req, res) {
+  Worker.find(function (err, workers) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(workers.filter((e) => e.user === req.params.id));
+    }
+  });
+});
+
+applyWorker.route("/").get(function (req, res) {
+  Worker.find(function (err, workers) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(workers);
+    }
+  });
+});
+
+applyWorker.route("/").post(function (req, res) {
+  db.collection("works").insertOne(req.body);
+  res.send(req.body);
+});
+
+applyWorker.route("/:id").put(function (req, res) {
+  db.collection("works").findOneAndUpdate(
+    { id: req.params.id },
+    {
+      $set: {
+        title: req.body.title,
+        experience: req.body.experience,
+        technologies: req.body.technologies,
+        userName: req.body.userName,
+        category: req.body.category,
+        degree: req.body.degree,
+        hours: req.body.hours,
+        remote: req.body.remote,
+        untilDate: req.body.untilDate,
+      },
+    }
+  );
+  res.send();
+});
+
+applyWorker.route("/:id").delete(function (req, res) {
+  db.collection("works").deleteOne({ id: req.params.id });
+  res.send(req.body);
+});
