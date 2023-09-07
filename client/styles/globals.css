@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: "regular";
+  src: url("../public/fonts/Jost/Jost-Regular.ttf");
+}
+
+@font-face {
+  font-family: "light";
+  src: url("../public/fonts/Jost/Jost-Light.ttf");
+}
+
+@font-face {
+  font-family: "bold";
+  src: url("../public/fonts/Jost/Jost-Bold.ttf");
+}
+
+@font-face {
+  font-family: "semibold";
+  src: url("../public/fonts/Jost/Jost-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "italic";
+  src: url("../public/fonts/Jost/Jost-Italic.ttf");
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    color: white;
+    background: black;
+  }
+}
+
+.statsText span {
+  font-weight: 700;
+}

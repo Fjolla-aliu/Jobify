@@ -25,5 +25,8 @@ let User = new Schema({
   role: {
     type: String,
   },
+  jobsid: {
+    type: String,
+  }
 });
 module.exports = mongoose.model("User", User);

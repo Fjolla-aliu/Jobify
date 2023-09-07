@@ -163,3 +163,80 @@ applyWorker.route("/:id").delete(function (req, res) {
   db.collection("works").deleteOne({ id: req.params.id });
   res.send(req.body);
 });
+
+
+
+
+
+
+// -----------------------------------Managing Applications ----------------------------------------------
+
+
+
+let Apply = require("./apply.model");
+
+const applyRoutes = express.Router();
+app.use("/applies", applyRoutes);
+
+applyRoutes.route("/:id").get(function (req, res) {
+  const userID = req.params.id;
+  Apply.find(function (err, applies) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(applies.filter((e) => e.user.id === userID));
+    }
+  });
+});
+
+applyRoutes.route("/applicants/:id").get(function (req, res) {
+  const jobID = req.params.id;
+  Apply.find(function (err, applies) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(applies.filter((e) => e.job.id === jobID));
+    }
+  });
+});
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+applyRoutes.route("/").post(function (req, res) {
+  db.collection("applies").insertOne(req.body);
+  res.send(req.body);
+});
+
+const upload = multer({ storage: storage });
+
+applyRoutes.route("/file").post(upload.single("picture"), function (req, res) {
+  res.send("Uploaded successfully");
+});
+
+app.get("/uploads/:fileName", function (req, res) {
+  var options = {
+    root: "uploads",
+  };
+  res.sendFile(req.params.fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Sent successfully");
+    }
+  }); // find out the filePath based on given fileName
+});
+
+
+
+
+
+
+
+
