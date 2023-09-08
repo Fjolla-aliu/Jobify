@@ -1,88 +1,109 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const express = require('express');
+const bcrypt = require('bcrypt');
 
-const mysql2 = require('mysql2');
-
-var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "mysql.123",
-  database:"jobifydb"
+const con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'mysql.123',
+  database: 'jobifydb',
 });
 
-con.connect(function(err) {
+con.connect((err) => {
   if (err) throw err;
-  console.log("Connected!");
+  console.log('Connected to MySQL database!');
 });
 
+const app = express();
 
+app.use(express.json()); // Add this line to parse JSON request bodies
 
 // ---------------------------------------Managing Users -------------------------------------------
 
-
-
-let User = require("./users.model");
-
 const userRoutes = express.Router();
-app.use("/users", userRoutes);
+app.use('/users', userRoutes);
 
-userRoutes.route("/:email").get(function (req, res) {
+userRoutes.route('/:email').get((req, res) => {
   const myEmail = req.params.email;
-  User.findOne({ email: myEmail }, function (err, users) {
+  // Replace with your MySQL query to fetch user by email
+  con.query('SELECT * FROM user WHERE email = ?', [myEmail], (err, results) => {
     if (err) {
       console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      res.json(users);
+      res.json(results[0]);
     }
   });
 });
 
-userRoutes.route("/").post(function (req, res) {
-  User.findOne({ email: req.body.email }, function (err, users) {
-    if (users === null) {
-      db.collection("users").insertOne(req.body);
-      res.send("Added user successfully");
+userRoutes.route('/').get((req, res) => {
+  const myEmail = req.params.email;
+  // Replace with your MySQL query to fetch user by email
+  con.query('SELECT * FROM user', (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      res.send("User with this email already exists.");
+      res.json(results[0]);
     }
   });
 });
 
-userRoutes.route("/:id").put(function (req, res) {
-  db.collection("users").findOneAndUpdate(
-    { id: req.params.id },
-    {
-      $set: {
-        name: req.body.name,
-        surname: req.body.surname,
-        email: req.body.email,
-        gender: req.body.gender,
-        password: req.body.password,
-        role: req.body.role,
-        jobsid: req.body.jobsid
-      },
+userRoutes.route('/').post(async (req, res) => {
+  const { email, password } = req.body;
+
+  // Hash the password before storing it in the database
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Replace with your MySQL query to insert a new user
+  con.query('INSERT INTO user (email, password) VALUES (?, ?)', [email, hashedPassword], (err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.status(201).json({ message: 'User added successfully' });
+    }
+  });
+});
+
+userRoutes.route('/:id').put(async (req, res) => {
+  const userId = req.params.id;
+  const { name, surname, email, gender, password, role, jobsid } = req.body;
+
+  // Hash the updated password before updating it in the database
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Replace with your MySQL query to update the user
+  con.query(
+    'UPDATE user SET name = ?, surname = ?, email = ?, gender = ?, password = ?, role = ?, jobsid = ? WHERE id = ?',
+    [name, surname, email, gender, hashedPassword, role, jobsid, userId],
+    (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.json({ message: 'User updated successfully' });
+      }
     }
   );
-  res.send(req.body);
 });
 
-userRoutes.route("/:id").delete(function (req, res) {
-  db.collection("users").deleteOne({ id: req.params.id });
-  res.send(req.body);
+userRoutes.route('/:id').delete((req, res) => {
+  const userId = req.params.id;
+
+  // Replace with your MySQL query to delete the user
+  con.query('DELETE FROM user WHERE id = ?', [userId], (err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ message: 'User deleted successfully' });
+    }
+  });
 });
 
-const bcrypt = require("bcrypt");
-const password = "asd";
-async function hashIt(password) {
-  const salt = await bcrypt.genSalt(6);
-  const hashed = await bcrypt.hash(password, salt);
-  // console.log(hashed);
-}
-hashIt(password);
-async function compareIt(password) {
-  const validPassword = await bcrypt.compare(
-    password,
-    "$2b$06$6HigN7M9ox90MDv03xyW6eUAYzGoX1HTkfl9ynJ5zBXC0X2kcmY0C"
-  );
-  // console.log(validPassword);
-}
-compareIt(password);
+const PORT = 8080;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
