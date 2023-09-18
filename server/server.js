@@ -34,7 +34,7 @@ app.use("/jobs", booksRoutes);
 
 booksRoutes.route("/:id").get(async function (req, res) {
   try {
-    const jobs = await Job.findOne({ _id: req.params.id });
+    const jobs = await Job.findOne({ id: req.params.id });
     res.json(jobs);
   } catch (err) {
     console.log(err);
@@ -44,7 +44,7 @@ booksRoutes.route("/:id").get(async function (req, res) {
 
 
 booksRoutes.route("/my/:id").get(function (req, res) {
-  Job.find(function (err, jobs) {
+  Job.find().then(function (err, jobs) {
     if (err) {
       console.log(err);
     } else {
@@ -69,7 +69,7 @@ booksRoutes.route("/").post(function (req, res) {
   res.send(req.body);
 });
 
-booksRoutes.route("/:id").put(function (req, res) {
+booksRoutes.route("/:id").put(function (req, res) {s
   db.collection("jobs").findOneAndUpdate(
     { id: req.params.id },
     {
@@ -106,28 +106,24 @@ app.use("/works", applyWorker);
 
 applyWorker.route("/:id").get(function (req, res) {
   if (req.params.id !== undefined) {
-    Worker.findOne({ id: req.params.id }, function (err, workers) {
-      if (err) {
-        console.log(err);
-      } else {
+    Worker.findOne().then({ id: req.params.id }, function ( workers) {
+     
         res.json(workers);
-      }
+      
     });
   }
 });
 
 applyWorker.route("/my/:id").get(function (req, res) {
-  Worker.find(function (err, workers) {
-    if (err) {
-      console.log(err);
-    } else {
+  Worker.find().then(function ( workers) {
+      console.log(req.params.id);
       res.json(workers.filter((e) => e.user === req.params.id));
-    }
+    
   });
 });
 
 applyWorker.route("/").get(function (req, res) {
-  Worker.find(function (err, workers) {
+  Worker.find().then(function (err, workers) {
     if (err) {
       console.log(err);
     } else {
@@ -142,7 +138,7 @@ applyWorker.route("/").post(function (req, res) {
 });
 
 applyWorker.route("/:id").put(function (req, res) {
-  db.collection("works").findOneAndUpdate(
+  db.collection("works").findOneAndUpdate().then(
     { id: req.params.id },
     {
       $set: {
@@ -236,6 +232,106 @@ app.get("/uploads/:fileName", function (req, res) {
 });
 
 
+// ----------------------------------------- Managing statistics---------------------------
+
+
+const statsRoutes = express.Router();
+app.use("/stats", statsRoutes);
+
+statsRoutes.route("/jobs").get(function (req, res) {
+  Job.find()
+    .then(function (jobs) {
+      let stats = [];
+      stats.push({ jobsNumber: jobs.length });
+      const category = ["programming", "science", "economy"];
+      let categoryNumber = [0, 0, 0];
+      jobs.forEach((element) => {
+        if (element.category === category[0]) {
+          categoryNumber[0] = categoryNumber[0] + 1;
+        }
+        if (element.category === category[1]) {
+          categoryNumber[1] = categoryNumber[1] + 1;
+        }
+        if (element.category === category[2]) {
+          categoryNumber[2] = categoryNumber[2] + 1;
+        }
+      });
+      stats.push({
+        categories: [
+          { programming: categoryNumber[0] },
+          { science: categoryNumber[1] },
+          { economy: categoryNumber[2] },
+        ],
+      });
+      res.send(stats);
+    })
+    .catch(function (err) {
+      console.log(err);
+      
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+});
+
+
+
+
+
+statsRoutes.route("/workers").get(function (req, res) {
+  Worker.find().then(function (err, workers) {
+    let stats = [];
+    if (err) {
+      console.log(err);
+    } else {
+      stats.push({ workersNumber: workers.length });
+      const category = ["programming", "science", "economy"];
+      let categoryNumber = [0, 0, 0];
+      workers.forEach((element) => {
+        if (element.category === category[0]) {
+          categoryNumber[0] = categoryNumber[0] + 1;
+        }
+        if (element.category === category[1]) {
+          categoryNumber[1] = categoryNumber[1] + 1;
+        }
+        if (element.category === category[2]) {
+          categoryNumber[2] = categoryNumber[2] + 1;
+        }
+      });
+      stats.push({
+        categories: [
+          { programming: categoryNumber[0] },
+          { science: categoryNumber[1] },
+          { economy: categoryNumber[2] },
+        ],
+      });
+    }
+    res.send(stats);
+  });
+});
+
+statsRoutes.route("/applies").get(function (req, res) {
+  Apply.find().then(function (err, applies) {
+    let stats = [];
+    if (err) {
+      console.log(err);
+    } else {
+      stats.push({ appliesNumber: applies.length });
+      const gender = ["male", "female"];
+      let genderNumber = [0, 0];
+      applies.forEach((element) => {
+        if (element.user.gender === gender[0]) {
+          genderNumber[0] = genderNumber[0] + 1;
+        }
+        if (element.user.gender === gender[1]) {
+          genderNumber[1] = genderNumber[1] + 1;
+        }
+      });
+      stats.push({
+        gender: [{ male: genderNumber[0] }, { female: genderNumber[1] }],
+      });
+    }
+    res.send(stats);
+  });
+});
 
 
 
