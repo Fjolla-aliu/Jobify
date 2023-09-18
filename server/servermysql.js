@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
 const express = require('express');
 const bcrypt = require('bcrypt');
+const cors = require("cors");
 
 const con = mysql.createConnection({
   host: 'localhost',
@@ -16,12 +17,18 @@ con.connect((err) => {
 
 const app = express();
 
+app.use(cors());
+
+
 app.use(express.json()); // Add this line to parse JSON request bodies
+
+
+
 
 // ---------------------------------------Managing Users -------------------------------------------
 
 const userRoutes = express.Router();
-app.use('/users', userRoutes);
+app.use('/user', userRoutes);
 
 userRoutes.route('/:email').get((req, res) => {
   const myEmail = req.params.email;
@@ -44,19 +51,18 @@ userRoutes.route('/').get((req, res) => {
       console.log(err);
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      res.json(results[0]);
+      res.json(results);
     }
   });
 });
 
 userRoutes.route('/').post(async (req, res) => {
-  const { email, password } = req.body;
+  if (req.body.role === "user") {
+    const { id, name, surname, gender, age, email, password, role, jobsid } = req.body;
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Hash the password before storing it in the database
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // Replace with your MySQL query to insert a new user
-  con.query('INSERT INTO user (email, password) VALUES (?, ?)', [email, hashedPassword], (err) => {
+  
+  con.query('INSERT INTO user (id,name, surname, gender, age, email, password, role,jobsid) VALUES (?,?, ?, ?, ?, ?, ?, ?,?)', [id,name, surname, gender, age, email, hashedPassword, role,jobsid], (err) => {
     if (err) {
       console.log(err);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -64,6 +70,24 @@ userRoutes.route('/').post(async (req, res) => {
       res.status(201).json({ message: 'User added successfully' });
     }
   });
+  } else {
+      const { id, name, email, password, role} = req.body;
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+  
+  con.query('INSERT INTO user (id,name, email, password, role) VALUES (?,?, ?, ?, ? )', [id,name,  email, hashedPassword, role], (err) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.status(201).json({ message: 'User added successfully' });
+    }
+  });
+  }
+  
+
+  // Hash the password before storing it in the database
+
 });
 
 userRoutes.route('/:id').put(async (req, res) => {
@@ -73,7 +97,7 @@ userRoutes.route('/:id').put(async (req, res) => {
   // Hash the updated password before updating it in the database
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Replace with your MySQL query to update the user
+  // Replace with MySQL query to update the user
   con.query(
     'UPDATE user SET name = ?, surname = ?, email = ?, gender = ?, password = ?, role = ?, jobsid = ? WHERE id = ?',
     [name, surname, email, gender, hashedPassword, role, jobsid, userId],
@@ -91,7 +115,7 @@ userRoutes.route('/:id').put(async (req, res) => {
 userRoutes.route('/:id').delete((req, res) => {
   const userId = req.params.id;
 
-  // Replace with your MySQL query to delete the user
+  // Replace with MySQL query to delete the user
   con.query('DELETE FROM user WHERE id = ?', [userId], (err) => {
     if (err) {
       console.log(err);

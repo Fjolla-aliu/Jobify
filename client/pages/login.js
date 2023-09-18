@@ -28,14 +28,16 @@ export default function Home() {
   //here it is the object for reference code
   const onSubmitSignInForm = (data) => {
     axios
-      .get("http://localhost:3306/user/" + data.email)
+      .get("http://localhost:8080/user/" + data.email)
       .then((response) => {
         let login = false;
-        if (data.password === response.data.password) {
+         console.log(response.data);
+   
+         
           setUser(response.data);
           router.push("/profile");
           login = true;
-        }
+        
         setLoggedIn(login);
       })
       .catch(function (error) {
@@ -73,7 +75,7 @@ export default function Home() {
           };
 
     axios
-      .post("http://localhost:3306/user/", addUser)
+      .post("http://localhost:8080/user", addUser)
       .then(function (response) {
         alert(response.data);
         router.reload();

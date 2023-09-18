@@ -32,15 +32,16 @@ const { db } = require("./jobs.model");
 const booksRoutes = express.Router();
 app.use("/jobs", booksRoutes);
 
-booksRoutes.route("/:id").get(function (req, res) {
-  Job.findOne({ id: req.params.id }, function (err, jobs) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json(jobs);
-    }
-  });
+booksRoutes.route("/:id").get(async function (req, res) {
+  try {
+    const jobs = await Job.findOne({ _id: req.params.id });
+    res.json(jobs);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 booksRoutes.route("/my/:id").get(function (req, res) {
   Job.find(function (err, jobs) {
@@ -52,14 +53,15 @@ booksRoutes.route("/my/:id").get(function (req, res) {
   });
 });
 
-booksRoutes.route("/").get(function (req, res) {
-  Job.find(function (err, jobs) {
-    if (err) {
-      console.log(err);
-    } else {
+   booksRoutes.route("/").get(function (req, res) {
+   Job.find()
+    .then(function (jobs) {
       res.json(jobs);
-    }
-  });
+    })
+    .catch(function (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 });
 
 booksRoutes.route("/").post(function (req, res) {

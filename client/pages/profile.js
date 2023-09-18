@@ -1,5 +1,5 @@
 import Layout from "../components/Layout";
-import EditUserForm from "../components/EditUserForm";
+// import EditUserForm from "../components/EditUserForm";
 import TitleAndDescription from "../components/TitleAndDescription";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -65,13 +65,13 @@ export default function Profile() {
       <div className="w-full h-full px-10 xl:px-0 flex flex-col items-center justify-center py-20 gap-20">
         <div className="w-full md:w-3/5 lg:w-3/4 xl:w-1/2 gap-y-8 border border-tertiaryBackground shadow-2xl rounded-xl overflow-hidden bg-white rounded-r-lg rounded-b-lg flex-col py-8 xl:py-12 px-6 xl:px-12">
           <TitleAndDescription title="Edit profile" titleCustomStyle="pb-8" />
-          <EditUserForm
+          {/* <EditUserForm
             user={user}
             registerForm={registerForm}
             handleSubmitForm={handleSubmitForm}
             errorsForm={errorsForm}
             onSubmitRegisterForm={onSubmitRegisterForm}
-          />
+          /> */}
         </div>
       </div>
     </Layout>

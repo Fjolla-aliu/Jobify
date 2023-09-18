@@ -12,7 +12,7 @@ import Question from "../public/icons/objects/question.svg";
 
 export default function Layout({ children }) {
   const user = useStore((state) => state.user);
-  
+  console.log(user);
 
 
   const [menuItems, setMenuItems] = useState([
@@ -50,42 +50,42 @@ export default function Layout({ children }) {
     },
   ]);
 
-  useEffect(() => {
-    setMenuItems([
-      {
-        icon: (
-          <Building className="w-4 h-4 fill-secondary group-hover:fill-primary" />
-        ),
-        link: "/",
-        label: "Home",
-        cartCounter: 0,
-      },
-      {
-        icon: (
-          <Building className="w-4 h-4 fill-secondary group-hover:fill-primary" />
-        ),
-        link: "/workers",
-        label: "Workers",
-        cartCounter: 0,
-      },
-      {
-        icon: (
-          <Question className="w-4 h-4 fill-secondary group-hover:fill-primary" />
-        ),
-        link: "/about-us",
-        label: "About Us",
-        cartCounter: 0,
-      },
-      {
-        icon: (
-          <User className="w-4 h-4 fill-secondary group-hover:fill-primary" />
-        ),
-        link: "/login",
-        label: "Login",
-        cartCounter: 0,
-      },
-    ]);
-  });
+  // useEffect(() => {
+  //   setMenuItems([
+  //     {
+  //       icon: (
+  //         <Building className="w-4 h-4 fill-secondary group-hover:fill-primary" />
+  //       ),
+  //       link: "/",
+  //       label: "Home",
+  //       cartCounter: 0,
+  //     },
+  //     {
+  //       icon: (
+  //         <Building className="w-4 h-4 fill-secondary group-hover:fill-primary" />
+  //       ),
+  //       link: "/workers",
+  //       label: "Workers",
+  //       cartCounter: 0,
+  //     },
+  //     {
+  //       icon: (
+  //         <Question className="w-4 h-4 fill-secondary group-hover:fill-primary" />
+  //       ),
+  //       link: "/about-us",
+  //       label: "About Us",
+  //       cartCounter: 0,
+  //     },
+  //     {
+  //       icon: (
+  //         <User className="w-4 h-4 fill-secondary group-hover:fill-primary" />
+  //       ),
+  //       link: "/login",
+  //       label: "Login",
+  //       cartCounter: 0,
+  //     },
+  //   ]);
+  // });
 
   useEffect(() => {
     if (user.role === "admin" || user.role === "user") {
