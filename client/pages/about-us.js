@@ -8,6 +8,8 @@ export default function AboutUs() {
   const [userStats, setUserStats] = useState([]);
   const [appliesStats, setAppliesStats] = useState([]);
 
+
+
   useLayoutEffect(() => {
     axios
       .get("http://localhost:4000/stats/jobs")
@@ -19,11 +21,24 @@ export default function AboutUs() {
       });
   }, []);
 
+
+
   useLayoutEffect(() => {
     axios
       .get("http://localhost:4000/stats/workers")
       .then((response) => {
         setWorkStats(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+
+    useLayoutEffect(() => {
+    axios
+      .get("http://localhost:8080/stats/users")
+      .then((response) => {
+        setUserStats(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -41,6 +56,7 @@ export default function AboutUs() {
         console.log(error);
       });
   }, []);
+
 
 
   return (
@@ -86,8 +102,8 @@ export default function AboutUs() {
               />
             </div>
             <div className="w-auto flex flex-col xl:ml-32 mt-12 text-21 font-semibold text-secondary">
-              <p>Name: Fjolla Aliu & Sherifzade Bajrami</p>
-              <p>From: Preshevë</p>
+              <p>Name:   Fjolla Aliu   &   Sherifzade Bajrami</p>
+              <p>From:   Preshevë</p>
               <p>Students at University for Business and Technology</p>
               <p>Field of Computer Science and Engineering</p>
             </div>
@@ -96,27 +112,26 @@ export default function AboutUs() {
         {jobStats.length !== 0 &&
           userStats.length !== 0 &&
           appliesStats.length !== 0 &&
-          workStats.length !== 0 &&
-          interviewsStats.length !== 0 && (
+          workStats.length !== 0 && (
             <div className="w-full flex flex-col gap-8">
               <h2 className="text-[38px] font-bold text-secondary">
                 Statistics
               </h2>
               <p className="statsText font-regular text-18">
                 Inside our website are registered{" "}
-                <span>{userStats[3].companyNumbers} companies</span> and{" "}
-                <span>{userStats[4].usersNumber} users</span>. <br />
+                <span>{userStats?.companyNumbers} companies</span> and{" "}
+                <span>{userStats?.usersNumber} users</span>. <br />
                 Our users have made{" "}
                 <span>
-                  {appliesStats[0].appliesNumber} applications
+                  {appliesStats[0]?.appliesNumber} applications
                 </span> inside{" "}
-                <span>{jobStats[0].jobsNumber} jobs positions</span>.<br />
+                <span>{jobStats[0]?.jobsNumber} jobs positions</span>.<br />
                 Our users have made{" "}
                 inside{" "}
-                <span>{workStats[0].workersNumber} workers positions</span>
+                <span>{workStats[0]?.workersNumber} workers positions</span>
                 .<br />
                 Our users are aged approx{" "}
-                <span>{userStats[1].averageAge} years old</span>.
+                <span>{userStats[1]?.averageAge} years old</span>.
               </p>
             </div>
           )}
@@ -128,7 +143,7 @@ export default function AboutUs() {
                 <p className="text-21 font-semibold">
                   - Jobs position for every category
                 </p>
-                {jobStats[1].categories.map((item, index) => (
+                {jobStats[1]?.categories.map((item, index) => (
                   <div key={index} className="w-full flex flex-col">
                     <p className="flex font-bold text-secondary items-center capitalize">
                       {Object.keys(item)[0]}
@@ -137,7 +152,7 @@ export default function AboutUs() {
                       <div
                         style={{
                           width:
-                            (Object.values(item)[0] / jobStats[0].jobsNumber) *
+                            (Object.values(item)[0] / jobStats[0]?.jobsNumber) *
                               100 +
                             "%",
                         }}
@@ -151,7 +166,7 @@ export default function AboutUs() {
                 <p className="text-21 font-semibold">
                   - Workers position for every category
                 </p>
-                {workStats[1].categories.map((item, index) => (
+                {workStats[1]?.categories.map((item, index) => (
                   <div key={index} className="w-full flex flex-col">
                     <p className="flex font-bold text-secondary items-center capitalize">
                       {Object.keys(item)[0]}
@@ -161,7 +176,7 @@ export default function AboutUs() {
                         style={{
                           width:
                             (Object.values(item)[0] /
-                              workStats[0].workersNumber) *
+                              workStats[0]?.workersNumber) *
                               100 +
                             "%",
                         }}
@@ -173,7 +188,7 @@ export default function AboutUs() {
               </div>
               <div className="w-full flex flex-col gap-4">
                 <p className="text-21 font-semibold">- Users by gender</p>
-                {userStats[0].gender.map((item, index) => (
+                {userStats?.gender.map((item, index) => (
                   <div key={index} className="w-full flex flex-col">
                     <p className="flex font-bold text-secondary items-center capitalize">
                       {Object.keys(item)[0]}
@@ -183,7 +198,7 @@ export default function AboutUs() {
                         style={{
                           width:
                             (Object.values(item)[0] /
-                              userStats[4].usersNumber) *
+                              userStats?.usersNumber) *
                               100 +
                             "%",
                         }}
@@ -197,7 +212,7 @@ export default function AboutUs() {
                 <p className="text-21 font-semibold">
                   - Applications by gender
                 </p>
-                {appliesStats[1].gender.map((item, index) => (
+                {appliesStats[1]?.gender.map((item, index) => (
                   <div key={index} className="w-full flex flex-col">
                     <p className="flex font-bold text-secondary items-center capitalize">
                       {Object.keys(item)[0]}
@@ -207,7 +222,7 @@ export default function AboutUs() {
                         style={{
                           width:
                             (Object.values(item)[0] /
-                              appliesStats[0].appliesNumber) *
+                              appliesStats[0]?.appliesNumber) *
                               100 +
                             "%",
                         }}

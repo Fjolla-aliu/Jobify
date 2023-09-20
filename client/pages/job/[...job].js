@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -11,11 +12,10 @@ import { v4 as uuidv4 } from "uuid";
 export default function Job() {
   const router = useRouter();
   const [job, setJob] = useState([]);
-    let jobID = "65078f3746afb6b5e7880260";
+  let jobID = router.query.job;
 
- 
   const user = useStore((state) => state.user);
-
+  console.log(user);
   const uniqueid = uuidv4();
 
   const [applyModal, setApplyModal] = useState(false);
@@ -25,20 +25,17 @@ export default function Job() {
     if (jobID !== undefined) {
       axios
         .get("http://localhost:4000/jobs/" + jobID)
-          .then((response) => {
-           
+        .then((response) => {
           setJob(response.data);
           setApplyJob(response.data);
         })
         .catch(function (error) {
           console.log(error);
         });
-      }
-  }, [jobID]);
-    
-    
-    // console.log(router.query.slug);
+    }
+  }, [router.isReady]);
 
+  
   const {
     register,
     handleSubmit,
@@ -91,45 +88,45 @@ export default function Job() {
       });
   };
 
-
   return (
     <Layout>
-      { job !== undefined && (
+      {job !== undefined && (
         <div className="w-10/12 lg:w-full flex flex-col gap-8 container mx-auto py-20">
-          <h2 className="text-[38px] font-bold text-secondary">{job.title}</h2>
-          <p className="font-regular text-secondary">{job.description}</p>
+          <h2 className="text-[38px] font-bold text-secondary">{job?.title}</h2>
+          <p className="font-regular text-secondary">{job?.description}</p>
           <div className="w-full border-t-2 border-blackOpacity10"></div>
           <div className="w-full flex flex-col gap-4 lg:gap-16 lg:flex-row font-semibold text-secondary">
             <div className="w-auto flex flex-col">
               <p className="text-13 text-tertiary">Company:</p>
-              <p>{job.company}</p>
+              <p>{job?.company}</p>
             </div>
             <div className="w-auto flex flex-col">
               <p className="text-13 text-tertiary">Category:</p>
-              <p>{job.category}</p>
+              <p>{job?.category}</p>
             </div>
             <div className="w-auto flex flex-col">
               <p className="text-13 text-tertiary">Hours:</p>
-              <p>{job.hours}</p>
+              <p>{job?.hours}</p>
             </div>
             <div className="w-auto flex flex-col">
               <p className="text-13 text-tertiary">Remote:</p>
-              <p>{job.remote ? "Yes" : "No"}</p>
+              <p>{job?.remote ? "Yes" : "No"}</p>
             </div>
-            {(user.role === "user" || user.role === undefined) && (
+             {user?.role === "user"  && (
+            
               <button
-                type="button"
-                onClick={() => {
-                  user.role === "user"
-                    ? setApplyModal(true)
-                    : router.push("/login");
-                }}
-                className="ml-auto px-3 py-1 border-2 rounded-lg font-regular text-buttonHover hover:bg-buttonHover hover:text-white border-buttonHover"
-              >
-                Apply
-              </button>
-             )} 
-          
+                  type="button"
+                  onClick={() => {
+                    user?.role === "user"
+                      ? setApplyModal(true)
+                      : router.push("/login");
+                  }}
+                  className="ml-auto px-3 py-1 border-2 rounded-lg font-regular text-buttonHover hover:bg-buttonHover hover:text-white border-buttonHover"
+                >
+                  Apply
+                </button> 
+            
+            )} 
           </div>
         </div>
       )}

@@ -23,7 +23,7 @@ const EditUserForm = ({
       </div>
     );
   }
-
+  console.log(user);
   return (
     <form
       onSubmit={handleSubmitForm(onSubmitRegisterForm)}
@@ -116,7 +116,7 @@ const EditUserForm = ({
             icon={<Heart className="stroke-primary w-4 h-4" />}
           >
             <select
-              defaultSelected={user.gender}
+              defaultValue={user.gender}
               placeholder="Choose gender"
               className="w-full outline-none"
               {...registerForm("gender", {

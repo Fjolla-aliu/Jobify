@@ -3,10 +3,9 @@ import useStore from "../stores/defaultStore";
 import { useRouter } from "next/router";
 
 const SingleJob = ({ item, setApplyJob, setApplyModal }) => {
-  const addToFavorites = useStore((state) => state.addToFavorites);
-  const jobsListSaved = useStore((state) => state.jobsListSaved);
   const user = useStore((state) => state.user);
   const router = useRouter();
+  
 
   return (
     <li className="w-full border-2 border-tertiaryBackground rounded-xl flex flex-col">
@@ -45,7 +44,7 @@ const SingleJob = ({ item, setApplyJob, setApplyModal }) => {
             Apply
           </button>
         )}
-        <button
+        {/* <button
           type="button"
           onClick={() => {
             addToFavorites(item);
@@ -59,7 +58,7 @@ const SingleJob = ({ item, setApplyJob, setApplyModal }) => {
           {JSON.stringify(jobsListSaved).includes(item.id)
             ? "Unsave"
             : "Save job"}
-        </button>
+        </button> */}
       </div>
     </li>
   );

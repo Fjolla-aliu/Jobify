@@ -23,15 +23,11 @@ export default function Home() {
       .get("http://localhost:4000/jobs/")
       .then((response) => {
         setJobs(
-          response.data.filter(
-            (e) => e.untilDate > new Date().toLocaleDateString("sv-SE")
-          )
-        );
+          response.data)
         setJobsData(
-          response.data.filter(
-            (e) => e.untilDate > new Date().toLocaleDateString("sv-SE")
-          )
+          response.data
         );
+
       })
       .catch(function (error) {
         console.log(error);
@@ -40,8 +36,9 @@ export default function Home() {
 
   useEffect(() => {
     let data = jobsData;
+
     if (categoryFilters !== "all") {
-      data = data.filter((e) => e.category === categoryFilters);
+      data = data.filter((e) => e.category.toLowerCase() === categoryFilters.toLowerCase());
     }
     if (categoryFilters === "all") {
       data = jobsData;
@@ -108,7 +105,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="w-full container mx-auto px-12 xl:px-0 flex flex-col gap-8 py-20">
+      <div className="w-full container mx-auto px-12 xl:px-0 flex flex-col gap-8 py-20  bg-slate-300" >
         <h2 className="text-[38px] font-bold text-secondary">Featured Jobs</h2>
         <div className="w-full flex flex-wrap gap-8 justify-between items-center">
           <input
@@ -157,7 +154,7 @@ export default function Home() {
               <form
                 encType="multipart/form-data"
                 onSubmit={handleSubmit(onSubmitApplyForm)}
-                // action="http://localhost:4000/applies/"
+                 action="http://localhost:4000/applies/"
                 method="post"
               >
                 <InputLabelAndDesign label="Upload your CV">

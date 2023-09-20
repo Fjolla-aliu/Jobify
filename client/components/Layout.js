@@ -12,13 +12,12 @@ import Question from "../public/icons/objects/question.svg";
 
 export default function Layout({ children }) {
   const user = useStore((state) => state.user);
-  console.log(user);
 
 
   const [menuItems, setMenuItems] = useState([
     {
       icon: (
-        <Building className="w-4 h-4 fill-secondary group-hover:fill-primary" />
+        <Building className="w-4 h-4 to-primaryBackground fill-secondary group-hover:fill-primary" />
       ),
       link: "/",
       label: "Home",

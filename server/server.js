@@ -44,12 +44,10 @@ booksRoutes.route("/:id").get(async function (req, res) {
 
 
 booksRoutes.route("/my/:id").get(function (req, res) {
-  Job.find().then(function (err, jobs) {
-    if (err) {
-      console.log(err);
-    } else {
+  Job.find().then(function (jobs) {
+   
       res.json(jobs.filter((e) => e.user === req.params.id));
-    }
+    
   });
 });
 
@@ -69,22 +67,29 @@ booksRoutes.route("/").post(function (req, res) {
   res.send(req.body);
 });
 
-booksRoutes.route("/:id").put(function (req, res) {s
-  db.collection("jobs").findOneAndUpdate(
-    { id: req.params.id },
-    {
-      $set: {
-        title: req.body.title,
-        description: req.body.description,
-        companyName: req.body.companyName,
-        category: req.body.category,
-        hours: req.body.hours,
-        remote: req.body.remote,
-        untilDate: req.body.untilDate,
-      },
-    }
-  );
-  res.send();
+booksRoutes.route("/:id").put(function (req, res) {
+  const filter = { id: req.params.id }; // Filter by id
+  const update = {
+    $set: {
+      title: req.body.title,
+      description: req.body.description,
+      companyName: req.body.companyName,
+      category: req.body.category,
+      hours: req.body.hours,
+      remote: req.body.remote,
+      untilDate: req.body.untilDate,
+    },
+  };
+
+  db.collection("jobs")
+    .findOneAndUpdate(filter, update)
+    .then(() => {
+      res.send(); // Send a response when the update is complete
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Internal Server Error"); // Handle errors gracefully
+    });
 });
 
 booksRoutes.route("/:id").delete(function (req, res) {
@@ -106,11 +111,18 @@ app.use("/works", applyWorker);
 
 applyWorker.route("/:id").get(function (req, res) {
   if (req.params.id !== undefined) {
-    Worker.findOne().then({ id: req.params.id }, function ( workers) {
-     
-        res.json(workers);
-      
+    Worker.findOne({ id: req.params.id }).then(function (worker) {
+      if (worker) {
+        res.json(worker);
+      } else {
+        res.status(404).json({ error: "Worker not found" });
+      }
+    }).catch(function (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal Server Error" });
     });
+  } else {
+    res.status(400).json({ error: "Invalid ID parameter" });
   }
 });
 
@@ -123,12 +135,10 @@ applyWorker.route("/my/:id").get(function (req, res) {
 });
 
 applyWorker.route("/").get(function (req, res) {
-  Worker.find().then(function (err, workers) {
-    if (err) {
-      console.log(err);
-    } else {
+  Worker.find().then(function ( workers) {
+    
       res.json(workers);
-    }
+   
   });
 });
 
@@ -178,23 +188,19 @@ app.use("/applies", applyRoutes);
 
 applyRoutes.route("/:id").get(function (req, res) {
   const userID = req.params.id;
-  Apply.find(function (err, applies) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json(applies.filter((e) => e.user.id === userID));
-    }
+  Apply.find().then(function (applies) {
+   
+    res.json(applies.filter((e) => e.user.id === userID));
   });
-});
+  });
+
 
 applyRoutes.route("/applicants/:id").get(function (req, res) {
   const jobID = req.params.id;
-  Apply.find(function (err, applies) {
-    if (err) {
-      console.log(err);
-    } else {
+  Apply.find().then(function ( applies) {
+    
       res.json(applies.filter((e) => e.job.id === jobID));
-    }
+    
   });
 });
 
@@ -229,6 +235,38 @@ app.get("/uploads/:fileName", function (req, res) {
       console.log("Sent successfully");
     }
   }); // find out the filePath based on given fileName
+});
+
+
+
+// -------------------------- Managing Interviews ----------------------
+
+let Interview = require("./interview.model");
+
+const interviewsRoutes = express.Router();
+app.use("/interviews", interviewsRoutes);
+
+interviewsRoutes.route("/:id").get(function (req, res) {
+  const userID = req.params.id;
+  Interview.find().then(function ( interviews) {
+   
+      res.json(interviews.filter((e) => e.user.id === userID));
+    
+  });
+});
+
+interviewsRoutes.route("/companies/:id").get(function (req, res) {
+  const jobID = req.params.id;
+  Interview.find().then(function (interviews) {
+   
+      res.json(interviews.filter((e) => e.worker.id === jobID));
+    
+  });
+});
+
+interviewsRoutes.route("/").post(function (req, res) {
+  db.collection("interviews").insertOne(req.body);
+  res.send(req.body);
 });
 
 
@@ -277,11 +315,9 @@ statsRoutes.route("/jobs").get(function (req, res) {
 
 
 statsRoutes.route("/workers").get(function (req, res) {
-  Worker.find().then(function (err, workers) {
+  Worker.find().then(function ( workers) {
     let stats = [];
-    if (err) {
-      console.log(err);
-    } else {
+    
       stats.push({ workersNumber: workers.length });
       const category = ["programming", "science", "economy"];
       let categoryNumber = [0, 0, 0];
@@ -303,17 +339,15 @@ statsRoutes.route("/workers").get(function (req, res) {
           { economy: categoryNumber[2] },
         ],
       });
-    }
+    
     res.send(stats);
   });
 });
 
 statsRoutes.route("/applies").get(function (req, res) {
-  Apply.find().then(function (err, applies) {
+  Apply.find().then(function ( applies) {
     let stats = [];
-    if (err) {
-      console.log(err);
-    } else {
+    
       stats.push({ appliesNumber: applies.length });
       const gender = ["male", "female"];
       let genderNumber = [0, 0];
@@ -328,7 +362,7 @@ statsRoutes.route("/applies").get(function (req, res) {
       stats.push({
         gender: [{ male: genderNumber[0] }, { female: genderNumber[1] }],
       });
-    }
+    
     res.send(stats);
   });
 });

@@ -90,6 +90,7 @@ userRoutes.route('/').post(async (req, res) => {
 
 });
 
+
 userRoutes.route('/:id').put(async (req, res) => {
   const userId = req.params.id;
   const { name, surname, email, gender, password, role, jobsid } = req.body;
@@ -126,8 +127,54 @@ userRoutes.route('/:id').delete((req, res) => {
   });
 });
 
+
+
+//----------------Statistics--------------
+
+const statsRoutes = express.Router();
+app.use("/stats", statsRoutes);
+
+statsRoutes.route("/users").get(function (req, res) {
+  // SQL query to fetch users and calculate statistics
+  const query = `
+    SELECT 
+      SUM(CASE WHEN gender = 'male' THEN 1 ELSE 0 END) AS maleCount,
+      SUM(CASE WHEN gender = 'female' THEN 1 ELSE 0 END) AS femaleCount,
+      AVG(age) AS averageAge,
+      COUNT(*) AS totalUsers,
+      SUM(CASE WHEN role = 'company' THEN 1 ELSE 0 END) AS companyCount
+    FROM user;
+  `;
+
+  con.query(query, function (err, results) {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    // Extract statistics from the query results
+    const stats = {
+      gender: [
+        { male: results[0].maleCount },
+        { female: results[0].femaleCount },
+      ],
+      averageAge: results[0].averageAge,
+      onlyUsersNumbers: results[0].totalUsers,
+      companyNumbers: results[0].companyCount,
+      usersNumber: results[0].totalUsers - results[0].companyCount,
+    };
+
+    res.json(stats);
+  });
+});
+
+
 const PORT = 8080;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
+

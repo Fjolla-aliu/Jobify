@@ -87,9 +87,9 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="w-full h-full bg-white">
-        <div className="relative w-10/12 drop-shadow-2xl xl:w-full container mx-auto py-20 flex flex-col items-center justify-center">
-          <div className="w-full shadow-lg md:w-3/5 lg:w-3/4 xl:w-1/2 flex text-secondary font-bold text-16">
+      <div className="w-full h-full bg-green-100 ">
+        <div className="relative w-10/12 drop-shadow-2xl xl:w-full container mx-auto py-20 flex flex-col items-center justify-center ">
+          <div className="w-full shadow-lg md:w-3/5 lg:w-3/4 xl:w-1/2 flex text-secondary font-bold text-16 ">
             <button
               type="button"
               onClick={() => setActiveTab("Register")}
