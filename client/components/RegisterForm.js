@@ -188,7 +188,7 @@ const RegisterForm = ({
             {...registerForm("password", {
               required: true,
               pattern:
-                /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+                /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!.%*?&])[A-Za-z\d@$!%.*?&]+$/,
               minLength: 8,
               maxLength: 20,
             })}
