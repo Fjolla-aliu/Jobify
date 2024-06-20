@@ -92,19 +92,28 @@ export default function Layout({ children }) {
           cartCounter: 0,
         },
         {
-          icon: (
-            <User className="w-4 h-4 fill-secondary group-hover:fill-primary" />
-          ),
-          link: "/pplications",
-          label: "All Applications",
+          link: "/add-device",
+          label: "Add dev",
           cartCounter: 0,
         },
         {
-          icon: (
-            <User className="w-4 h-4 fill-secondary group-hover:fill-primary" />
-          ),
-          link: "/applicants",
-          label: "All Applicants",
+          link: "/add-sensor",
+          label: "Add sns",
+          cartCounter: 0,
+        },
+        {
+          link: "/sensors",
+          label: "All sns",
+          cartCounter: 0,
+        },
+        {
+          link: "/devices",
+          label: "All dev",
+          cartCounter: 0,
+        },
+        {
+          link: "/sensors-by-devices",
+          label: "SenByDev",
           cartCounter: 0,
         },
         {

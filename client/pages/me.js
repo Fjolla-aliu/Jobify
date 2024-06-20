@@ -127,7 +127,10 @@ export default function Me() {
     <Layout>
       <div className="w-full h-full px-10 xl:px-0 flex flex-col items-center justify-center py-20 gap-20">
         <div className="w-full md:w-3/5 lg:w-3/4 xl:w-1/2 gap-y-8 border border-tertiaryBackground shadow-2xl rounded-xl overflow-hidden bg-slate-300 rounded-r-lg rounded-b-lg flex-col py-8 xl:py-12 px-6 xl:px-12">
-          <TitleAndDescription title="Posted jobs" titleCustomStyle="pb-8" />
+          <TitleAndDescription
+            title="My job-searching posts"
+            titleCustomStyle="pb-8"
+          />
           {jobs.length === 0 && (
             <p className="font-regular text-16 text-secondary">
               No jobs were posted from you until now.
@@ -194,7 +197,7 @@ export default function Me() {
         </div>
         <div className="w-full md:w-3/5 lg:w-3/4 xl:w-1/2 gap-y-8 border border-tertiaryBackground shadow-2xl rounded-xl overflow-hidden bg-white rounded-r-lg rounded-b-lg flex-col py-8 xl:py-12 px-6 xl:px-12">
           <TitleAndDescription
-            title="Add new job position"
+            title="Apply for a new job position"
             titleCustomStyle="pb-8"
           />
           <AddJobFormUser

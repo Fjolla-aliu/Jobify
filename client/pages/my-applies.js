@@ -41,7 +41,7 @@ export default function MyApplies() {
     <Layout>
       <div className="w-full h-full px-10 xl:px-0 flex flex-col items-center justify-center py-20 gap-20">
         <div className="w-full md:w-3/5 lg:w-3/4 xl:w-1/2 gap-y-8 border border-tertiaryBackground shadow-2xl rounded-xl overflow-hidden bg-slate-300 rounded-r-lg rounded-b-lg flex-col py-8 xl:py-12 px-6 xl:px-12">
-          <TitleAndDescription title="Applied jobs" titleCustomStyle="pb-8" />
+          <TitleAndDescription title="Open positions" titleCustomStyle="pb-8" />
           {applies.length === 0 && (
             <p className="font-regular text-16 text-secondary">
               Please apply at least one job.

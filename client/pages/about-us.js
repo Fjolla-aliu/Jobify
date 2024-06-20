@@ -8,8 +8,6 @@ export default function AboutUs() {
   const [userStats, setUserStats] = useState([]);
   const [appliesStats, setAppliesStats] = useState([]);
 
-
-
   useLayoutEffect(() => {
     axios
       .get("http://localhost:4000/stats/jobs")
@@ -20,8 +18,6 @@ export default function AboutUs() {
         console.log(error);
       });
   }, []);
-
-
 
   useLayoutEffect(() => {
     axios
@@ -34,7 +30,7 @@ export default function AboutUs() {
       });
   }, []);
 
-    useLayoutEffect(() => {
+  useLayoutEffect(() => {
     axios
       .get("http://localhost:8080/stats/users")
       .then((response) => {
@@ -45,7 +41,6 @@ export default function AboutUs() {
       });
   }, []);
 
-  
   useLayoutEffect(() => {
     axios
       .get("http://localhost:4000/stats/applies")
@@ -56,8 +51,6 @@ export default function AboutUs() {
         console.log(error);
       });
   }, []);
-
-
 
   return (
     <Layout>
@@ -102,8 +95,8 @@ export default function AboutUs() {
               />
             </div>
             <div className="w-auto flex flex-col xl:ml-32 mt-12 text-21 font-semibold text-secondary">
-              <p>Name:   Fjolla Aliu   &   Sherifzade Bajrami</p>
-              <p>From:   Preshevë</p>
+              <p>Name: Fjolla Aliu & Sherifzade Bajrami</p>
+              <p>From: Preshevë</p>
               <p>Students at University for Business and Technology</p>
               <p>Field of Computer Science and Engineering</p>
             </div>
@@ -122,16 +115,14 @@ export default function AboutUs() {
                 <span>{userStats?.companyNumbers} companies</span> and{" "}
                 <span>{userStats?.usersNumber} users</span>. <br />
                 Our users have made{" "}
-                <span>
-                  {appliesStats[0]?.appliesNumber} applications
-                </span> inside{" "}
-                <span>{jobStats[0]?.jobsNumber} jobs positions</span>.<br />
-                Our users have made{" "}
-                inside{" "}
+                <span>{appliesStats[0]?.appliesNumber} applications</span>{" "}
+                inside <span>{jobStats[0]?.jobsNumber} jobs positions</span>.
+                <br />
+                Our users have made inside{" "}
                 <span>{workStats[0]?.workersNumber} workers positions</span>
                 .<br />
                 Our users are aged approx{" "}
-                <span>{userStats[1]?.averageAge} years old</span>.
+                <span>{userStats?.averageAge} years old</span>.
               </p>
             </div>
           )}
@@ -197,8 +188,7 @@ export default function AboutUs() {
                       <div
                         style={{
                           width:
-                            (Object.values(item)[0] /
-                              userStats?.usersNumber) *
+                            (Object.values(item)[0] / userStats?.usersNumber) *
                               100 +
                             "%",
                         }}

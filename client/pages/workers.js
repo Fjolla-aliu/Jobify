@@ -89,7 +89,7 @@ export default function ClientList() {
 
   return (
     <Layout>
-      <div className="w-full container mx-auto px-12 xl:px-0 flex flex-col gap-8 py-20 bg-slate-300">
+      <div className="w-full container mx-auto px-12 flex flex-col gap-8 py-20 bg-slate-300">
         <h2 className="text-[38px] font-bold text-secondary">
           Featured Workers
         </h2>

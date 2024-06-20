@@ -15,7 +15,7 @@ const EditUserForm = ({
   onSubmitRegisterForm,
   user,
 }) => {
-  if (user === undefined || user === []) {
+  if (user === undefined || user.length === 0) {
     return (
       <div className="w-full flex flex-col gap-4 h-full py-32 items-center justify-center">
         <div className="w-24 h-24 border-t-4 rounded-full border-primary animate-spin"></div>
